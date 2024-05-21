@@ -23,7 +23,7 @@ public:
     float mDur;
     float mPanRise;
     gam::Pan<> mPan;
-    gam::NoiseWhite<> noise;//todo
+    gam::NoisePink<> noise;//example plucking: https://www.youtube.com/watch?v=ROe61GyvtXM&t=90s
     gam::Decay<> env;
     gam::MovingAvg<> fil {2};
     gam::Delay<float, gam::ipl::Trunc> delay;
@@ -45,11 +45,11 @@ public:
 
 
         addCube(mMesh, 1.0, 3);
-        createInternalTriggerParameter("amplitude", 0.1, 0.0, 1.0);
+        createInternalTriggerParameter("amplitude", 0.6, 0.0, 1.0);
         createInternalTriggerParameter("frequency", 60, 20, 5000);
-        createInternalTriggerParameter("attackTime", 0.002, 0.001, 1.0);
-        createInternalTriggerParameter("releaseTime", 10.0, 0.1, 10.0);
-        createInternalTriggerParameter("sustain", 0.365, 0.0, 1.0);
+        createInternalTriggerParameter("attackTime", 0.001, 0.001, 1.0);
+        createInternalTriggerParameter("releaseTime", 0.25, 0.1, 10.0);
+        createInternalTriggerParameter("sustain", 0.5, 0.0, 1.0);
         createInternalTriggerParameter("Pan1", 0.0, -1.0, 1.0);
         createInternalTriggerParameter("Pan2", 0.0, -1.0, 1.0);
         createInternalTriggerParameter("PanRise", 0.0, -1.0, 1.0); // range check
