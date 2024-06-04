@@ -1,5 +1,7 @@
 #include <cstdio>  // for printing to stdout
 
+#include "al/app/al_App.hpp"
+#include "al/math/al_Random.hpp"
 #include "Gamma/Analysis.h"
 #include "Gamma/Effects.h"
 #include "Gamma/Envelope.h"
@@ -55,8 +57,6 @@ public:
         createInternalTriggerParameter("PanRise", 0.0, -1.0, 1.0); // range check
     }
     
-//    void reset(){ env.reset(); }
-
     float operator() (){
         return (*this)(noise()*env());
     }
@@ -126,6 +126,16 @@ public:
 };
 
 
+struct Particle {
+  Vec3f pos, vel, acc;
+  int age = 0;
+
+  void update(int ageInc) {
+    vel += acc;
+    pos += vel;
+    age += ageInc;
+  }
+};
 
 class MyApp : public App
 {
@@ -144,25 +154,196 @@ public:
     void onCreate() override {
         // Play example sequence. Comment this line to start from scratch
         //    synthManager.synthSequencer().playSequence("synth8.synthSequence");
+        nav().pullBack(20);
         synthManager.synthRecorder().verbose(true);
     }
+
+    template <int N>
+    struct Emitter {
+      Particle particles[N];
+      int tap = 0;
+
+      Emitter() {
+        for (auto& p : particles) p.age = N;
+      }
+
+      template <int M>
+      void update(float xpos, float ypos) {
+        for (auto& p : particles) p.update(M);
+
+        for (int i = 0; i < M; ++i) {
+          auto& p = particles[tap];
+
+          // fountain
+          if (al::rnd::prob(0.95)) {
+            p.vel.set(al::rnd::uniform(0.2), 0,
+                      0);
+
+            p.acc.set(0, -0.03, 0);
+          }
+          p.pos.set(xpos, ypos, 0);
+
+          p.age = 0;
+          ++tap;
+          if (tap >= N) tap = 0;
+        }
+      }
+
+      int size() { return N; }
+    };
 
     void onSound(AudioIOData& io) override {
         synthManager.render(io);  // Render audio
     }
 
+    Emitter<250> em1;
+    Emitter<250> em2;
+    Emitter<250> em3;
+    Emitter<250> em4;
+    Emitter<250> em5;
+    Emitter<250> em6;
+    Emitter<250> em7;
+    Emitter<250> em8;
+    Emitter<250> em9;
+    Emitter<250> em10;
+    Emitter<250> em11;
+    Emitter<250> em12;
+    Emitter<250> em13;
+    Emitter<250> em14;
+    Emitter<250> em15;
+    Emitter<250> em16;
+    Emitter<250> em17;
+    Emitter<250> em18;
+    Emitter<250> em21;
+    Emitter<250> em22;
+    Emitter<250> em23;
+    Emitter<250> em24;
+    Emitter<250> em25;
+    Emitter<250> em26;
+    Emitter<250> em27;
+    Emitter<250> em28;
+    Emitter<250> em29;
+    Emitter<250> em30;
+    Emitter<250> em31;
+    Emitter<250> em32;
+    Emitter<250> em33;
+    Emitter<250> em34;
+    Emitter<250> em35;
+    Emitter<250> em36;
+    Emitter<250> em37;
+    Emitter<250> em38;
+    Mesh mesh;
+
+
+    void computeParticles(Emitter<250> em) {
+        for (int i = 0; i < em.size(); ++i) {
+        Particle& p = em.particles[i];
+        float age = float(p.age) / em.size();
+
+        mesh.vertex(p.pos);
+        mesh.color(HSV(0.6, al::rnd::uniform(), (1 - age) * 0.4));
+        }
+    }
+
     void onAnimate(double dt) override {
-        imguiBeginFrame();
-        synthManager.drawSynthControlPanel();
-        imguiEndFrame();
+        // imguiBeginFrame();
+        // synthManager.drawSynthControlPanel();
+        // imguiEndFrame();
+        int height = 6;
+        int width = -5;
+
+        em1.update<5>(-4 + width, 0.0 + height);
+        em2.update<5>(-3.5 + width, 0.1 + height);
+        em3.update<5>(-3 + width, 0.2 + height);
+        em4.update<5>(-2.5 + width, 0.3 + height);
+        em5.update<5>(-2 + width, 0.4 + height);
+        em6.update<5>(-1.5 + width, 0.3 + height);
+        em7.update<5>(-1 + width, 0.2 + height);
+        em8.update<5>(-0.5 + width, 0.1 + height);
+        em9.update<5> (0 + width, 0.0 + height);
+        em10.update<5>(0.5 + width, 0.1 + height);
+        em11.update<5>(1 + width, 0.2 + height);
+        em12.update<5>(1.5 + width, 0.3 + height);
+        em13.update<5>(2 + width, 0.4 + height);
+        em14.update<5>(2.5 + width, 0.3 + height);
+        em15.update<5>(3 + width, 0.2 + height);
+        em16.update<5>(3.5 + width, 0.1 + height);
+        em17.update<5>(4 + width, 0.0 + height);
+        em18.update<5>(4.5 + width, 0.1 + height);
+
+        float offset = 8;
+        em21.update<5>(-4 + offset + width, 0.0 + height);
+        em22.update<5>(-3.5 + offset + width, 0.1 + height);
+        em23.update<5>(-3 + offset + width, 0.2 + height);
+        em24.update<5>(-2.5 + offset + width, 0.3 + height);
+        em25.update<5>(-2 + offset + width, 0.4 + height);
+        em26.update<5>(-1.5 + offset + width, 0.3 + height);
+        em27.update<5>(-1 + offset + width, 0.2 + height);
+        em28.update<5>(-0.5 + offset + width, 0.1 + height);
+        em29.update<5> (0 + offset + width, 0.0 + height);
+        em30.update<5>(0.5 + offset + width, 0.1 + height);
+        em31.update<5>(1 + offset + width, 0.2 + height);
+        em32.update<5>(1.5 + offset + width, 0.3 + height);
+        em33.update<5>(2 + offset + width, 0.4 + height);
+        em34.update<5>(2.5 + offset + width, 0.3 + height);
+        em35.update<5>(3 + offset + width, 0.2 + height);
+        em36.update<5>(3.5 + offset + width, 0.1 + height);
+        em37.update<5>(4 + offset + width, 0.0 + height);
+        em38.update<5>(4.5 + offset + width, 0.1 + height);
+
+        mesh.reset();
+        mesh.primitive(Mesh::POINTS);
+
+        computeParticles(em1);
+        computeParticles(em2);
+        computeParticles(em3);
+        computeParticles(em4);
+        computeParticles(em5);
+        computeParticles(em6);
+        computeParticles(em7);
+        computeParticles(em8);
+        computeParticles(em9);
+        computeParticles(em10);
+        computeParticles(em11);
+        computeParticles(em12);
+        computeParticles(em13);
+        computeParticles(em14);
+        computeParticles(em15);
+        computeParticles(em16);
+        computeParticles(em17);
+        computeParticles(em18);
+        computeParticles(em21);
+        computeParticles(em22);
+        computeParticles(em23);
+        computeParticles(em24);
+        computeParticles(em25);
+        computeParticles(em26);
+        computeParticles(em27);
+        computeParticles(em28);
+        computeParticles(em29);
+        computeParticles(em30);
+        computeParticles(em31);
+        computeParticles(em32);
+        computeParticles(em33);
+        computeParticles(em34);
+        computeParticles(em35);
+        computeParticles(em36);
+        computeParticles(em37);
+        computeParticles(em38);
     }
 
     void onDraw(Graphics& g) override {
-        g.clear();
-        synthManager.render(g);
+        // g.clear();
+        // synthManager.render(g);
+        g.clear(0);
+        g.blending(true);
+        g.blendAdd();
+        g.pointSize(6);
+        g.meshColor();
+        g.draw(mesh);
 
-        // Draw GUI
-        imguiDraw();
+        // // Draw GUI
+        // imguiDraw();
     }
 
     bool onKeyDown(Keyboard const& k) override {
